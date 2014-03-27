@@ -1,0 +1,117 @@
+<?php $this->load->view("template_header"); ?>
+<?php $this->load->helper("user_image"); ?>
+<?php $this->load->helper("current_user") ?>
+
+        <div>
+           <h3>Welcome to the Senior Project Website Files Repository</h3>
+           <p>Want to upload a new file? Choose the project that you wish to associate your upload with:</p>
+              <?php echo form_open_multipart('filescontroller/do_upload');
+           
+               $projs = $this->db->query('SELECT id, title FROM spw_project
+                                    WHERE status = "APPROVED" OR status = "PENDING APPROVAL"
+                                    ORDER BY title');
+               $options = array();
+
+               
+               foreach ($projs->result_array() as $row)
+               {                  
+                   $options[$row["title"]] = $row["title"];
+               }
+
+                echo form_dropdown('projects', $options);?>
+               
+              <input class="btn-small btn-info" type="file" name="userfile" size="20" style="margin-top: 10px; margin-bottom: 5px" />
+              <input class="btn-small btn-primary" type="submit" value="Upload File" />
+              <?php echo form_close() ?>
+        </div>
+
+        <?php
+            echo form_open('filescontroller/download_delete_files', array(
+                'class' => '',
+                'id' => 'files_delete_form'
+            ));
+
+            $count = "SELECT COUNT(*) FROM spw_uploaded_file"; 
+
+            $total = $this->db->query($count)->row_array();
+            $num = $total['COUNT(*)'];
+
+        ?>
+        <div class ="well">
+            <p class ="pull-right">Total Number of Files: <?php echo $num?></p><br><br>
+            <table class = "table table-bordered">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Uploaded By</th>
+                        <th>Project</th>
+                        <th>Upload Date</th>
+                        <th>Download</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            <?php
+
+                $sql = "SELECT id, path_to_file, uploaded_by_user, project, upload_date FROM spw_uploaded_file ORDER BY project, upload_date";
+
+                $query = $this->db->query($sql);
+
+
+                foreach ($query->result_array() as $row)
+                 {
+                    $file_name = basename($row['path_to_file']);
+                    $user_name = getGenericUserFullName($row['uploaded_by_user']);
+
+                    echo "<tr BGCOLOR=\"#F4E8D4\">";
+                    echo "<td>".$file_name."</td>";
+                    echo "<td>".$user_name ."</td>";
+                    echo "<td>".$row['project'] ."</td>";
+                    echo "<td>".$row['upload_date'] ."</td>";
+                    echo "<td><input type=\"checkbox\" name=\"download_files[]\" value=\"" . $row['id']."\"></td>";
+                    if (isHeadProfessor($this))
+                    {
+                        echo "<td><input type=\"checkbox\" name=\"delete_files[]\" value=\"" . $row['id']."\"></td>";
+                    }
+                    else if (getCurrentUserId($this) == $row['uploaded_by_user'] )
+                    {
+                        echo "<td><input type=\"checkbox\" name=\"delete_files[]\" value=\"" . $row['id']."\"></td>";
+                    }
+                    else 
+                        echo "<td>Permission Required</td>";
+                    echo "</tr>";
+                }
+            ?>
+            </table>
+
+            <?php echo 'Choose an action:'?>
+                <br>
+                <br>
+
+                <div text-align: center>
+                    <label class="radio">
+                      <input type="radio" name="action" id="down" value="Download" checked>
+                      Download a single selected file
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="action" id="del" value="Delete">
+                      Delete the selected file(s)
+                    </label>
+                </div>
+            <br>
+
+            <?php 
+                echo form_submit(array(
+                    'id' => 'btn-act-deact',
+                    'name' => 'activate',
+                    'type' => 'Submit',
+                    'class' => 'btn btn-primary',
+                    'value' => 'Go'
+                ));
+
+                echo form_close()
+            ?>
+        </div>
+<br><br>
+
+
+<?php $this->load->view("template_footer"); ?>

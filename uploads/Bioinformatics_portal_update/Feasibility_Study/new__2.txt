@@ -1,0 +1,27 @@
+SELECT fname, lname
+FROM employee   
+WHERE ssn = (SELECT superssn, fname, lname
+		FROM employee
+		WHERE ssn = (SELECT essn, dependent_name
+					 FROM dependent
+					 WHERE dependent_name = 'Alice'))
+					 
+					 
+
+					 
+$projects = $db->query('SELECT dependent_name, essn FROM `dependent`');
+
+echo '<ul>';
+
+while($project = $projects->fetch_object()) {
+    echo '<li>' . $project->essn . '<ul>';
+    $todos = $db->query('SELECT fname, lname FROM `employee` WHERE `essn` = ' . $project->essn);
+
+    while($todo = $todos->fetch_object()) {
+        echo '<li>' . $todo->essn . '</li>';
+    }
+
+    echo '</ul></li>';
+}
+
+echo '</ul>';					 
