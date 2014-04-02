@@ -1,0 +1,132 @@
+<?php 
+    $this->load->view("template_header");
+    $this->load->helper("user_image");
+    $this->load->helper("current_user"); 
+?>
+        <div>
+        <?php 
+
+        if( isHeadProfessor($this) ) {
+        ?>
+           <h3>Files Repository</h3>
+        <?php 
+        } else {
+        ?>
+           <h3>My Project Repository</h3>
+        <?php 
+        }
+        ?>
+           <p>Want to upload a new file? Choose the project that you wish to associate your upload with:</p>
+           
+           <br>
+        <?php 
+            if( isHeadProfessor($this) ) {
+                echo anchor('http://localhost/senior-projects/admin/milestones_view', 'Manage Milestones', array(
+                                                     'style'   => 'margin-left: 8px',
+                                                     'class'   => 'btn btn-primary'
+                                                      ));       
+            } 
+        ?>
+           <input type="Submit" name="expand" value="Expand All" id="expand" style="margin-right: 35px" class="btn btn-primary pull-right" >
+           <br>
+           <br>              
+        </div>
+        <div class ="well">
+            <table class = "table table-bordered">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Uploaded By</th>
+                        <th>Project</th>
+                        <th>Upload Date</th>
+                        <th>Download</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            <?php
+
+                $sql = 'SELECT id, path_to_file, uploaded_by_user, project_id, upload_date
+                        FROM spw_uploaded_file
+                        ORDER BY project_id, upload_date';
+
+                $query = $this->db->query($sql);
+
+
+                foreach ($query->result_array() as $row)
+                 {
+                    $file_name = basename($row['path_to_file']);
+                    $user_name = getGenericUserFullName($row['uploaded_by_user']);
+
+                    echo "<tr BGCOLOR=\"#F4E8D4\">";
+                    echo "<td>".$file_name."</td>";
+                    echo "<td>".$user_name ."</td>";
+                    echo "<td>".$row['project'] ."</td>";
+                    echo "<td>".$row['upload_date'] ."</td>";
+                    echo "<td><input type=\"checkbox\" name=\"download_files[]\" value=\"" . $row['id']."\"></td>";
+                    if (isHeadProfessor($this))
+                    {
+                        echo "<td><input type=\"checkbox\" name=\"delete_files[]\" value=\"" . $row['id']."\"></td>";
+                    }
+                    else if (getCurrentUserId($this) == $row['uploaded_by_user'] )
+                    {
+                        echo "<td><input type=\"checkbox\" name=\"delete_files[]\" value=\"" . $row['id']."\"></td>";
+                    }
+                    else 
+                        echo "<td>Permission Required</td>";
+                    echo "</tr>";
+                }
+            ?>
+            </table>
+
+            <?php echo 'Choose an action:'?>
+                <br>
+                <br>
+                
+                <div text-align: center>
+                    <label class="radio">
+                      <input type="radio" name="action" id="down" value="Download" checked>
+                      Download a single selected file
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="action" id="del" value="Delete">
+                      Delete the selected file(s)
+                    </label>
+                </div>
+            <br>
+
+            <?php 
+                echo form_submit(array(
+                    'id'    => 'btn-act-deact',
+                    'name'  => 'activate',
+                    'type'  => 'Submit',
+                    'class' => 'btn btn-primary',
+                    'value' => 'Go'
+                ));
+
+                echo form_close()
+            ?>
+        </div>
+<br><br>
+
+
+<?php $this->load->view("template_footer"); ?>
+
+<script type="text/javascript">	
+    treeObj = new JSDragDropTree();
+    treeObj.setTreeId('dhtmlgoodies_tree2');
+    treeObj.setMaximumDepth(3);
+    treeObj.setMessageMaximumDepthReached('Maximum depth reached');
+    treeObj.initTree();
+    treeObj.expandAll();;
+    treeObj.collapseAll();
+    treeObj.setRenameAllowed();
+    treeObj.setDeleteAllowed(false);
+    
+    
+    function saveMyTree_byForm()
+    {
+      document.myForm.elements['saveString'].value = treeObj.getNodeOrders();
+      document.myForm.submit();    
+    }
+
+</script>

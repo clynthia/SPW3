@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/code/!svn/ver/73/trunk/Senior-Project/senior-projects/application/helpers
+END
+deadline_term_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/code/!svn/ver/73/trunk/Senior-Project/senior-projects/application/helpers/deadline_term_helper.php
+END
+current_user_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/code/!svn/ver/73/trunk/Senior-Project/senior-projects/application/helpers/current_user_helper.php
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/index.html
+END
+request_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/request_helper.php
+END
+project_summary_view_model_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/project_summary_view_model_helper.php
+END
+notifications_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/notifications_helper.php
+END
+user_image_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/code/!svn/ver/73/trunk/Senior-Project/senior-projects/application/helpers/user_image_helper.php
+END
+skills_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/skills_helper.php
+END
+istest_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/istest_helper.php
+END
+loading_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/loading_helper.php
+END
+email_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/code/!svn/ver/30/trunk/Senior-Project/senior-projects/application/helpers/email_helper.php
+END
+new_project_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/new_project_helper.php
+END
+nav_top_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/code/!svn/ver/73/trunk/Senior-Project/senior-projects/application/helpers/nav_top_helper.php
+END
+invitation_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/invitation_helper.php
+END
+flash_message_helper.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/helpers/flash_message_helper.php
+END

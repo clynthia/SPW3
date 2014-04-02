@@ -1,0 +1,185 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+session_start();
+
+class FilesController extends CI_Controller {
+
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper('nav_top');
+        $this->load->helper('flash_message');
+        $this->load->helper('request');
+        $this->load->helper('file');
+        $this->load->helper('download');
+        $this->load->helper('deadline_term');
+        $this->load->helper('flash_message');
+        $this->load->model('spw_user_model');
+        $this->load->model('spw_project_model');
+        $this->load->model('spw_uploaded_file_model');
+        $this->load->library('unit_test');
+        
+    }
+
+
+    public function project_files() {
+        
+        //if the user is logged in, then grant access
+        if( isUserLoggedIn($this))
+            $this->load->view('project_files');
+        else
+           redirect('home','refresh');
+     
+    }
+   
+    
+    public function head_guide()
+    {           
+        $this->download_single_file("./UserGuide/Head.pdf") ;
+    }
+    public function mentors_guide()
+    {           
+        $this->download_single_file("./UserGuide/Mentor.pdf") ;
+    }
+    
+     public function students_guide()
+    {           
+        $this->download_single_file("./UserGuide/Student.pdf") ;
+    }
+    
+    
+    public function download_single_file($file)
+    {       
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename='.basename($file));
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+        ob_clean();
+        flush();
+        readfile($file);
+        exit;
+    }
+    
+    //Function that handles the uploading of documents
+    public function do_upload()
+    {
+        $filecheck = basename($_FILES['userfile']['name']);
+        
+        //replace all spaces with underscores
+        $file = str_replace(' ', '_', $filecheck);
+        //extract the extension
+        $ext = strtolower(substr($filecheck, strrpos($file, '.') + 1));
+        
+        //if the extension is empty, then the user has not made a file selection
+        if ($ext == "")
+        {
+            $msg = 'Please choose a file to upload';
+            setErrorFlashMessage($this, $msg);
+            redirect('files/project_files');
+        }
+        //retrieve the name of the file
+        $filename = substr($file, 0, strrpos($file, '.'));
+        
+        //check that the uploads directory exists, if not then create it and grant all permissions
+        $dir = './uploads/';
+        if (!file_exists($dir) and !is_dir($dir)) 
+        {
+            mkdir($dir, 0777);      
+        } 
+        
+        $user =  getCurrentUserId($this);
+          
+        //check the directory uploads/user_id exists, if not then create it and grant all permissions
+        //every user will have a unique upload directory of their own
+        $dir2 = './uploads/'. $user .'/';
+        if (!file_exists($dir2) and !is_dir($dir2)) 
+        {
+            mkdir($dir2, 0777);   
+        } 
+
+        $config['upload_path'] = $dir2;
+        $config['allowed_types'] = '*';
+        $config['file_name'] = $filename;
+        $config['overwrite'] = true;
+
+        $this->load->library('upload', $config);
+
+        if ( !$this->upload->do_upload())
+        {
+            $error = array('error' => $this->upload->display_errors());
+            $msg = 'File upload was unsuccessful.';
+            setErrorFlashMessage($this, $msg);
+            redirect('files/project_files');
+            return;
+        }
+        else
+        {
+            //this is the final location of the file
+            $dir3 = $dir2 . $file;
+            
+            $uploaded_file =  new SPW_Uploaded_File_Model();
+            //store the uploaded file information in the database
+            $uploaded_file->insert($dir3, $user, $this->input->post('projects'));
+
+            $data = array('upload_data' => $this->upload->data());
+            $msg = 'Your upload was successful!';
+            setFlashMessage($this, $msg);
+            redirect('files/project_files', 'refresh');
+        }
+        
+    }
+    
+    public function download_delete_files()
+    {
+        $count = 0;
+        if ($this->input->post('action') === 'Delete')
+        {
+            if (is_array($this->input->post('delete_files'))) 
+            {
+                //retrieve all the ids from the array
+                foreach ($this->input->post('delete_files') as $key => $value) {
+                    $file_path = $this->spw_uploaded_file_model->get_file_path($value);
+                    $this->spw_uploaded_file_model->delete($value);
+                    unlink($file_path);
+                    $count++;
+                } 
+            }
+
+            if ($count > 0)
+            {
+                $msg = 'Successfully deleted ' . $count . ' file(s)';
+                setFlashMessage($this, $msg);
+            }
+            else 
+            {
+                $msg = 'No files were selected for deletion';
+                setErrorFlashMessage($this, $msg);
+            }
+        }
+        else if ($this->input->post('action') === 'Download')
+        {
+            if (is_array($this->input->post('download_files')) && count($this->input->post('download_files')) == 1) 
+            {
+                //retrieve all the ids from the array, in this case only one iteration
+                foreach ($this->input->post('download_files') as $key => $value) 
+                {
+                    $file_path = $this->spw_uploaded_file_model->get_file_path($value);
+                    //download the file that was selected
+                    $this->download_single_file($file_path);
+                } 
+            }
+            
+            $msg = 'A file was not selected for download';
+            
+            if (count($this->input->post('download_files')) > 1)     
+                $msg = 'Please only select a single file for download';
+            setErrorFlashMessage($this, $msg);
+        }
+        redirect('files/project_files');
+    }
+}

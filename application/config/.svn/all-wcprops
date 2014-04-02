@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/code/!svn/ver/78/trunk/Senior-Project/senior-projects/application/config
+END
+database.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/database.php
+END
+email.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/email.php
+END
+index.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/index.html
+END
+mimes.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/mimes.php
+END
+doctypes.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/doctypes.php
+END
+config.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/code/!svn/ver/78/trunk/Senior-Project/senior-projects/application/config/config.php
+END
+user_agents.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/user_agents.php
+END
+smileys.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/smileys.php
+END
+profiler.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/profiler.php
+END
+routes.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/code/!svn/ver/73/trunk/Senior-Project/senior-projects/application/config/routes.php
+END
+migration.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/migration.php
+END
+constants.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/constants.php
+END
+hooks.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/hooks.php
+END
+foreign_chars.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/foreign_chars.php
+END
+autoload.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/code/!svn/ver/7/trunk/Senior-Project/senior-projects/application/config/autoload.php
+END

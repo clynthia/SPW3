@@ -1,0 +1,69 @@
+<?php
+
+class SPW_Uploaded_File_Model extends CI_Model
+{
+    public $id;
+    public $path_to_file;
+    public $uploaded_by_user;
+    public $project;
+    public $upload_date;
+        
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    
+    public function insert($path, $user_id, $proj_name)
+    {      
+        $data = array(
+                        'path_to_file'  => $path,
+                        'uploaded_by_user' => $user_id,
+                        'project'  => $proj_name
+                     );
+        
+        $query = $this->db
+                      ->where('path_to_file', $path)
+                      ->select('path_to_file')
+                      ->get('spw_uploaded_file');
+        
+        //check that a record with the same path doesn't exists
+        if($query->num_rows() > 0)
+            return;
+        else
+        {
+           $this->db->insert('spw_uploaded_file', $data); 
+           $id =  $this->db->insert_id();         
+            
+           $sql = 'UPDATE spw_uploaded_file  SET upload_date = CURRENT_TIMESTAMP WHERE id  = ?';
+           $this->db->query($sql, $id);
+		
+           return ;
+        }   
+    }
+    
+    public function get_file_path($file_id)
+    {  
+        $query = $this->db
+               ->where('id', $file_id)
+               ->select('path_to_file')
+               ->get('spw_uploaded_file');
+
+        if($query->num_rows() > 0)
+        {
+            return $query->row()->path_to_file;
+        }
+        else
+        {
+            return null; 
+        }
+    }
+    
+    public function delete($file_id)
+    {  
+        $this->db->delete('spw_uploaded_file', array('id' => $file_id));
+    }
+
+}
+	
+?>
+
